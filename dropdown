@@ -1,0 +1,60 @@
+public static List<SelectListItem> BindDDL(DataTable dt, string value = null)
+        {
+            List<SelectListItem> lst = new List<SelectListItem>();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                //lst.Add(new SelectListItem() { Text = "--select--", Value = "" });
+                foreach (DataRow item in dt.Rows)
+                {
+                    if (Convert.ToString(item[0]) == value)
+                    {
+                        lst.Add(new SelectListItem()
+                        {
+                            Text = Convert.ToString(item[1]),
+                            Value = Convert.ToString(item[0]),
+                            Selected = true
+                        });
+                    }
+                    else
+                    {
+                        lst.Add(new SelectListItem()
+                        {
+                            Text = Convert.ToString(item[1]),
+                            Value = Convert.ToString(item[0])
+                        });
+                    }
+                }
+            }
+            else
+            {
+                lst.Add(new SelectListItem() { Text = "--none--", Value = "" });
+            }
+            return lst;
+        }
+        public static string ConvertTableToList(DataTable dt)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+
+
+                Hashtable[] pr = new Hashtable[dt.Rows.Count];
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Hashtable ch = new Hashtable();
+                    for (int j = 0; j < dt.Columns.Count; j++)
+                    {
+                        string columnName = Convert.ToString(dt.Columns[j]).Replace("'", "").Replace('"', ' ');
+                        string columnValue = Convert.ToString(dt.Rows[i][columnName]).Replace("'", "").Replace('"', ' '); ;
+                        ch.Add(columnName, columnValue);
+                    }
+                    pr[i] = ch;
+                }
+                js.MaxJsonLength = 999999999;
+                return js.Serialize(pr);
+            }
+
+
+            return "False";
+        }
