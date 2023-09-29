@@ -1,0 +1,14 @@
+public class clssms
+    {
+        public void SendSms(string mobileNO,string Message)
+        {
+            string strAPI = "";
+            strAPI=""+ mobileNO + "&message=" + Message + "";
+            HttpWebRequest myreg = (HttpWebRequest)WebRequest.Create(strAPI);
+            HttpWebResponse myresp = (HttpWebResponse)myreg.GetResponse();
+            System.IO.StreamReader respStreamReader = new System.IO.StreamReader(myresp.GetResponseStream());
+            string responseString = respStreamReader.ReadToEnd();
+            respStreamReader.Close();
+            myresp.Close();
+        }
+    }
